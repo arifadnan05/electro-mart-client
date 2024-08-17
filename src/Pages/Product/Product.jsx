@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import useAxiosPublic from "../../Routes/Hooks/useAxiosPublic"
 import { useState } from "react"
+import { useLoaderData } from "react-router-dom"
 
 const Product = () => {
     const axiosPublic = useAxiosPublic()
@@ -31,10 +32,24 @@ const Product = () => {
     // Use Set to get unique brands and categories
     const uniqueBrands = [...new Set(product.map((pro) => pro.brandName))];
     const uniqueCategories = [...new Set(product.map((pro) => pro.category))];
+
+
+    // loader using fetch data
+
+    const { count } = useLoaderData()
+    //pagination 
+
+    const itemsPerPage = 10
+    const numberOfPages = Math.ceil(count / itemsPerPage)
+    const pages = []
+    for(let i = 0; i < numberOfPages; i++){
+        pages.push(i)
+    }
+    console.log(pages)
     return (
         <>
 
-            <div className="flex">
+            <div className="flex justify-center gap-5 mt-6">
                 <div className="space-y-6">
                     <div>
                         <label className="input input-bordered flex items-center gap-2">
@@ -61,10 +76,10 @@ const Product = () => {
                     </div>
                 </div>
 
-                <div>
+                <div className="space-y-6">
                     <div>
                         <select className="select select-bordered w-full">
-                            <option disabled selected>Chose a Brand</option>
+                            <option disabled selected>Choose a Brand</option>
                             <div>
                                 <select
                                     name="brand"
@@ -76,6 +91,7 @@ const Product = () => {
                                         Choose a Brand
                                     </option>
                                     {uniqueBrands.map((brand, index) => (
+
                                         <option key={index} value={brand} className="uppercase">
                                             {brand}
                                         </option>

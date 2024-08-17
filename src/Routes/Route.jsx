@@ -15,7 +15,8 @@ const router = createBrowserRouter([
     // }
     {
         path: '/',
-        element: <Product />
+        element: <Product />,
+        loader: () => fetch('http://localhost:4000/products-count')
     }
 ])
 export default router
