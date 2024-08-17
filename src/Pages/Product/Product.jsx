@@ -177,11 +177,11 @@ const Product = () => {
                 }
 
             </div>
-            <div className="mb-[250px] space-x-3">
-                <p>Current Page value {currentPage + 1}</p>
+            <div className="flex justify-center items-center my-10 mb-[250px] space-x-3">
+                
                 <button onClick={handlePrevPage} className="btn btn-sm">Prev</button>
                 {
-                    pages.map((page, idx) => <button key={page} onClick={() => setCurrentPage(page)} className={`btn ${currentPage === page && 'bg-yellow-400'}`}>{idx + 1}</button>)
+                    pages.map((page, idx) => <button key={page} onClick={() => setCurrentPage(page)} className={`btn border ${currentPage === page && 'bg-neutral text-white'}`}>{idx + 1}</button>)
                 }
                 <button onClick={handleNextPage} className="btn btn-sm">Next</button>
             </div>
