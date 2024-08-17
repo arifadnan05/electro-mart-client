@@ -42,10 +42,25 @@ const Product = () => {
     const itemsPerPage = 10
     const numberOfPages = Math.ceil(count / itemsPerPage)
     const pages = []
-    for(let i = 0; i < numberOfPages; i++){
+    for (let i = 0; i < numberOfPages; i++) {
         pages.push(i)
     }
     console.log(pages)
+
+
+    // const pages = [...Array(numberOfPages).keys()]
+    // console.log(pages)
+
+
+    // handle selected items 
+
+    const handleSorting = e => {
+        console.log(e.target.value)
+    }
+
+    const handleCategory = e => {
+        console.log(e.target.value)
+    }
     return (
         <>
 
@@ -104,7 +119,7 @@ const Product = () => {
                     </div>
 
                     <div>
-                        <select className="select select-bordered w-full">
+                        <select onChange={handleSorting} className="select select-bordered w-full">
                             <option disabled selected>Sorting By</option>
                             <option>Low to high</option>
                             <option>High to low</option>
@@ -117,8 +132,8 @@ const Product = () => {
                         <select
                             name="category"
                             className="select select-bordered w-full"
-                            value={selectedOptions.category}
-                            onChange={handleChange}
+                            onChange={handleCategory}
+                            
                         >
                             <option disabled value="">
                                 Choose a Category
@@ -147,6 +162,12 @@ const Product = () => {
                             <p>Price ${item.price}</p>
                         </div>
                     </div>)
+                }
+
+            </div>
+            <div className="mb-[250px]">
+                {
+                    pages.map((page, idx) => <button key={page} className="btn">{idx + 1}</button>)
                 }
             </div>
         </>

@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: <Product />,
-        loader: () => fetch('https://electro-mart-alpha.vercel.app/products-count')
+        loader: () => fetch('http://localhost:4000/products-count')
     }
 ])
 export default router
