@@ -4,16 +4,17 @@ import { useState } from "react"
 import { useLoaderData } from "react-router-dom"
 
 const Product = () => {
+    const [currentPage, setCurrentPage] = useState(0)
     const axiosPublic = useAxiosPublic()
     const { data: product = [] } = useQuery({
-        queryKey: ['product'],
+        queryKey: ['product', currentPage],
         queryFn: async () => {
-            const res = await axiosPublic.get('/products')
+            const res = await axiosPublic.get(`/products?page=${currentPage}&size=${itemsPerPage}`)
             return res.data
         }
 
     })
-    console.log(product)
+    // console.log(product)
     // State to track both selected brand and category
     const [selectedOptions, setSelectedOptions] = useState({
         brand: "",
@@ -45,14 +46,25 @@ const Product = () => {
     for (let i = 0; i < numberOfPages; i++) {
         pages.push(i)
     }
-    console.log(pages)
+    
+    const handlePrevPage = () => {
+        if(currentPage > 0){
+            setCurrentPage(currentPage - 1)
+        }
+    }
+
+    const handleNextPage = () => {
+        if(currentPage < pages.length - 1){
+            setCurrentPage(currentPage + 1)
+        }
+    }
 
 
     // const pages = [...Array(numberOfPages).keys()]
     // console.log(pages)
 
 
-    // handle selected items 
+    // handle selected items || sorting filtering
 
     const handleSorting = e => {
         console.log(e.target.value)
@@ -165,10 +177,13 @@ const Product = () => {
                 }
 
             </div>
-            <div className="mb-[250px]">
+            <div className="mb-[250px] space-x-3">
+                <p>Current Page value {currentPage + 1}</p>
+                <button onClick={handlePrevPage} className="btn btn-sm">Prev</button>
                 {
-                    pages.map((page, idx) => <button key={page} className="btn">{idx + 1}</button>)
+                    pages.map((page, idx) => <button key={page} onClick={() => setCurrentPage(page)} className={`btn ${currentPage === page && 'bg-yellow-400'}`}>{idx + 1}</button>)
                 }
+                <button onClick={handleNextPage} className="btn btn-sm">Next</button>
             </div>
         </>
     )
