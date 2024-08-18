@@ -4,18 +4,29 @@ import { useState } from "react"
 import { useLoaderData } from "react-router-dom"
 
 const Product = () => {
-    const [currentPage, setCurrentPage] = useState(0)
-    const axiosPublic = useAxiosPublic()
+    // const [currentPage, setCurrentPage] = useState(0)
+    // const [asc, setAcc] = useState('desc')
+    // const axiosPublic = useAxiosPublic()
+    // const { data: product = [] } = useQuery({
+    //     queryKey: ['product', currentPage, asc],
+    //     queryFn: async () => {
+    //         const res = await axiosPublic.get(`/products?page=${currentPage}&size=${itemsPerPage}&sort=${asc ? 'asc' : 'desc'}`)
+    //         return res.data
+    //     }
+
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [asc, setAsc] = useState('desc');
+    const axiosPublic = useAxiosPublic();
+
     const { data: product = [] } = useQuery({
-        queryKey: ['product', currentPage],
+        queryKey: ['product', currentPage, asc],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/products?page=${currentPage}&size=${itemsPerPage}`)
-            return res.data
+            const res = await axiosPublic.get(`/products?page=${currentPage}&size=${itemsPerPage}&sort=${asc}`);
+            return res.data;
         }
 
     })
-    // console.log(product)
-    // State to track both selected brand and category
     const [selectedOptions, setSelectedOptions] = useState({
         brand: "",
         category: "",
@@ -46,15 +57,15 @@ const Product = () => {
     for (let i = 0; i < numberOfPages; i++) {
         pages.push(i)
     }
-    
+
     const handlePrevPage = () => {
-        if(currentPage > 0){
+        if (currentPage > 0) {
             setCurrentPage(currentPage - 1)
         }
     }
 
     const handleNextPage = () => {
-        if(currentPage < pages.length - 1){
+        if (currentPage < pages.length - 1) {
             setCurrentPage(currentPage + 1)
         }
     }
@@ -68,11 +79,13 @@ const Product = () => {
 
     const handleSorting = e => {
         console.log(e.target.value)
+
     }
 
     const handleCategory = e => {
         console.log(e.target.value)
     }
+    console.log(asc)
     return (
         <>
 
@@ -131,11 +144,13 @@ const Product = () => {
                     </div>
 
                     <div>
-                        <select onChange={handleSorting} className="select select-bordered w-full">
-                            <option disabled selected>Sorting By</option>
-                            <option>Low to high</option>
-                            <option>High to low</option>
-                        </select>
+                        <div>
+                            <select onChange={(e) => setAsc(e.target.value)} value={asc} className="select select-bordered w-full">
+                                <option value="asc">Low to High</option>
+                                <option value="desc">High to Low</option>
+                            </select>
+
+                        </div>
 
                     </div>
                 </div>
@@ -145,7 +160,7 @@ const Product = () => {
                             name="category"
                             className="select select-bordered w-full"
                             onChange={handleCategory}
-                            
+
                         >
                             <option disabled value="">
                                 Choose a Category
@@ -178,7 +193,7 @@ const Product = () => {
 
             </div>
             <div className="flex justify-center items-center my-10 mb-[250px] space-x-3">
-                
+
                 <button onClick={handlePrevPage} className="btn btn-sm">Prev</button>
                 {
                     pages.map((page, idx) => <button key={page} onClick={() => setCurrentPage(page)} className={`btn border ${currentPage === page && 'bg-neutral text-white'}`}>{idx + 1}</button>)
