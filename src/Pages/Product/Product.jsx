@@ -4,20 +4,11 @@ import { useState } from "react"
 import { useLoaderData } from "react-router-dom"
 
 const Product = () => {
-    // const [currentPage, setCurrentPage] = useState(0)
-    // const [asc, setAcc] = useState('desc')
-    // const axiosPublic = useAxiosPublic()
-    // const { data: product = [] } = useQuery({
-    //     queryKey: ['product', currentPage, asc],
-    //     queryFn: async () => {
-    //         const res = await axiosPublic.get(`/products?page=${currentPage}&size=${itemsPerPage}&sort=${asc ? 'asc' : 'desc'}`)
-    //         return res.data
-    //     }
-
-
     const [currentPage, setCurrentPage] = useState(0);
     const [asc, setAsc] = useState('desc');
+    const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
     const axiosPublic = useAxiosPublic();
+
 
     const { data: product = [] } = useQuery({
         queryKey: ['product', currentPage, asc],
@@ -31,7 +22,6 @@ const Product = () => {
         brand: "",
         category: "",
     });
-
     // Handle change for both brand and category
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -76,15 +66,6 @@ const Product = () => {
 
 
     // handle selected items || sorting filtering
-
-    const handleSorting = e => {
-        console.log(e.target.value)
-
-    }
-
-    const handleCategory = e => {
-        console.log(e.target.value)
-    }
     console.log(asc)
     return (
         <>
@@ -106,42 +87,59 @@ const Product = () => {
                             </svg>
                         </label>
                     </div>
+                    {/* --- Min Price --- */}
                     <div>
-                        <select className="select select-bordered w-full">
-                            <option disabled selected>Price Range</option>
-                            <option>Han Solo</option>
-                            <option>Greedo</option>
-                        </select>
+                        <div className="flex justify-center ml-2 mt-2 lg:ml-40">
+                            <div className="rounded-md w-full px-4 max-w-xl   lg:mt-0">
+                                <label className="label">
+                                    <span className="font-medium">Min Price :</span>
+                                </label>
+                                <input
+                                    type="number"
+                                    placeholder="Min Price"
+                                    className="w-32  p-3 rounded-md   border-blue-300   input-bordered border  placeholder-gray-500 dark:placeholder-gray-500 dark:border-indigo-600 dark:text-black"
+                                    value={priceRange.min}
+                                    onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
+                                />
+                            </div>
 
+                            {/* --- Max Price --- */}
+                            <div className="rounded-md w-full px-4 max-w-xl lg:mt-0">
+                                <label className="label">
+                                    <span className="font-medium">Max Price :</span>
+                                </label>
+                                <input
+                                    type="number"
+                                    placeholder="Max Price"
+                                    className="w-40  p-3 rounded-md  border-blue-300   input-bordered border  placeholder-gray-500 dark:placeholder-gray-500 dark:border-indigo-600 dark:text-black   "
+                                    value={priceRange.max}
+                                    onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
+                                />
+                            </div>
+                        </div>
                     </div>
+                    {/* ---------- Filter by Price Range End----------*/}
                 </div>
 
                 <div className="space-y-6">
                     <div>
-                        <select className="select select-bordered w-full">
-                            <option disabled selected>Choose a Brand</option>
-                            <div>
-                                <select
-                                    name="brand"
-                                    className="select select-bordered w-full"
-                                    value={selectedOptions.brand}
-                                    onChange={handleChange}
-                                >
-                                    <option disabled value="">
-                                        Choose a Brand
-                                    </option>
-                                    {uniqueBrands.map((brand, index) => (
-
-                                        <option key={index} value={brand} className="uppercase">
-                                            {brand}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
+                        <select
+                            name="brand"
+                            className="select select-bordered w-full"
+                            value={selectedOptions.brand}
+                            onChange={handleChange}
+                        >
+                            <option disabled value="">
+                                Choose a Brand
+                            </option>
+                            {uniqueBrands.map((brand, index) => (
+                                <option key={index} value={brand} className="uppercase">
+                                    {brand}
+                                </option>
+                            ))}
                         </select>
-
                     </div>
+
 
                     <div>
                         <div>
@@ -159,8 +157,8 @@ const Product = () => {
                         <select
                             name="category"
                             className="select select-bordered w-full"
-                            onChange={handleCategory}
-
+                            value={selectedOptions.category}
+                            onChange={handleChange}
                         >
                             <option disabled value="">
                                 Choose a Category
